@@ -2,12 +2,17 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { Product } from "@/data/products";
 
 export interface CartItem {
-  id: string;
+  id: string; // product id (uuid)
   qty: number;
+}
+
+interface CartLine extends CartItem {
+  product: Product;
 }
 
 interface CartCtx {
   items: CartItem[];
+  lines: CartLine[];
   count: number;
   subtotal: number;
   open: boolean;
@@ -19,7 +24,7 @@ interface CartCtx {
 }
 
 const CartContext = createContext<CartCtx | null>(null);
-const KEY = "cc.cart.v1";
+const KEY = "cc.cart.v2";
 
 export function CartProvider({ children, products }: { children: React.ReactNode; products: Product[] }) {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -39,13 +44,17 @@ export function CartProvider({ children, products }: { children: React.ReactNode
   }, [items, hydrated]);
 
   const value = useMemo<CartCtx>(() => {
-    const priceOf = (id: string) => products.find((p) => p.id === id)?.price ?? 0;
+    const map = new Map(products.map((p) => [p.id, p]));
+    const lines: CartLine[] = items
+      .map((i) => ({ ...i, product: map.get(i.id)! }))
+      .filter((l) => l.product);
     return {
       items,
+      lines,
       open,
       setOpen,
-      count: items.reduce((s, i) => s + i.qty, 0),
-      subtotal: items.reduce((s, i) => s + priceOf(i.id) * i.qty, 0),
+      count: lines.reduce((s, l) => s + l.qty, 0),
+      subtotal: lines.reduce((s, l) => s + l.product.price * l.qty, 0),
       add: (p, qty = 1) =>
         setItems((prev) => {
           const found = prev.find((i) => i.id === p.id);
