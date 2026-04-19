@@ -3,14 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart";
-import { formatKES, products } from "@/data/products";
+import { formatKES } from "@/data/products";
 
 export function CartDrawer() {
   const cart = useCart();
-
-  const lines = cart.items
-    .map((i) => ({ ...i, product: products.find((p) => p.id === i.id)! }))
-    .filter((l) => l.product);
 
   return (
     <Sheet open={cart.open} onOpenChange={cart.setOpen}>
@@ -19,7 +15,7 @@ export function CartDrawer() {
           <SheetTitle className="font-display text-2xl">Your bag</SheetTitle>
         </SheetHeader>
 
-        {lines.length === 0 ? (
+        {cart.lines.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
             <p className="font-display text-xl">Your bag is empty.</p>
             <p className="text-sm text-muted-foreground">Add a little luxe to your day.</p>
@@ -30,7 +26,7 @@ export function CartDrawer() {
         ) : (
           <>
             <div className="flex-1 divide-y divide-border overflow-y-auto px-6">
-              {lines.map((l) => (
+              {cart.lines.map((l) => (
                 <div key={l.id} className="flex gap-4 py-4">
                   <img src={l.product.image} alt={l.product.name} className="h-24 w-20 rounded-sm object-cover" />
                   <div className="flex flex-1 flex-col">
@@ -62,8 +58,8 @@ export function CartDrawer() {
                 <span className="font-medium">{formatKES(cart.subtotal)}</span>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">Shipping & taxes calculated at checkout.</p>
-              <Button className="mt-4 w-full rounded-none bg-foreground text-background hover:bg-foreground/90" size="lg">
-                Checkout
+              <Button asChild className="mt-4 w-full rounded-none bg-foreground text-background hover:bg-foreground/90" size="lg">
+                <Link to="/checkout" onClick={() => cart.setOpen(false)}>Checkout</Link>
               </Button>
             </div>
           </>

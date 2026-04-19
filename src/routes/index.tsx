@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, getRouteApi } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import hero from "@/assets/hero-beauty.jpg";
 import catSkin from "@/assets/cat-skincare.jpg";
@@ -8,7 +8,9 @@ import catNails from "@/assets/cat-nails.jpg";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ProductCard } from "@/components/site/ProductCard";
-import { products } from "@/data/products";
+import type { Product } from "@/data/products";
+
+const rootApi = getRouteApi("__root__");
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,8 +24,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const featured = products.slice(0, 4);
-
 const categoryCards = [
   { id: "skincare", label: "Skincare", img: catSkin },
   { id: "makeup",   label: "Makeup",   img: catMakeup },
@@ -32,6 +32,8 @@ const categoryCards = [
 ] as const;
 
 function Index() {
+  const products = rootApi.useLoaderData() as Product[];
+  const featured = products.slice(0, 4);
   return (
     <div className="min-h-screen bg-background">
       <Header />

@@ -2,7 +2,8 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import { CartProvider } from "@/lib/cart";
 import { CartDrawer } from "@/components/site/CartDrawer";
 import { ChatWidget } from "@/components/site/ChatWidget";
-import { products } from "@/data/products";
+import { AuthProvider } from "@/lib/auth";
+import { fetchProducts } from "@/lib/catalog";
 
 import appCss from "../styles.css?url";
 
@@ -29,25 +30,16 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
+  loader: () => fetchProducts({ activeOnly: true }).catch(() => []),
+  staleTime: 60_000,
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { title: "Crystal Crest — Beauty, considered." },
+      { name: "description", content: "An online beauty boutique for skincare, makeup, hair and nail essentials. Curated, considered, delivered." },
     ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-    ],
+    links: [{ rel: "stylesheet", href: appCss }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -69,11 +61,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const products = Route.useLoaderData();
   return (
-    <CartProvider products={products}>
-      <Outlet />
-      <CartDrawer />
-      <ChatWidget />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider products={products}>
+        <Outlet />
+        <CartDrawer />
+        <ChatWidget />
+      </CartProvider>
+    </AuthProvider>
   );
 }

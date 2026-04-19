@@ -4,12 +4,15 @@ import { z } from "zod";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ProductCard } from "@/components/site/ProductCard";
-import { categories, products, type Category } from "@/data/products";
+import { categories, type Category, type Product } from "@/data/products";
+import { getRouteApi } from "@tanstack/react-router";
 
 const searchSchema = z.object({
   category: fallback(z.enum(["all", "skincare", "makeup", "hair", "nails"]), "all").default("all"),
   sort: fallback(z.enum(["featured", "price-asc", "price-desc", "rating"]), "featured").default("featured"),
 });
+
+const rootApi = getRouteApi("__root__");
 
 export const Route = createFileRoute("/shop")({
   validateSearch: zodValidator(searchSchema),
@@ -27,6 +30,7 @@ export const Route = createFileRoute("/shop")({
 function Shop() {
   const { category, sort } = Route.useSearch();
   const navigate = useNavigate({ from: "/shop" });
+  const products = rootApi.useLoaderData() as Product[];
 
   const filtered = (category === "all" ? products : products.filter((p) => p.category === (category as Category)))
     .slice()
@@ -96,7 +100,7 @@ function Shop() {
         {filtered.length === 0 && (
           <div className="py-24 text-center">
             <p className="font-display text-2xl">Nothing here yet.</p>
-            <Link to="/shop" search={{ category: "all" }} className="mt-3 inline-block text-sm text-accent underline">
+            <Link to="/shop" search={{ category: "all", sort: "featured" }} className="mt-3 inline-block text-sm text-accent underline">
               Browse all products
             </Link>
           </div>

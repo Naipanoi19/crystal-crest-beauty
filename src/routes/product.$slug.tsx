@@ -1,16 +1,19 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, getRouteApi } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ProductCard } from "@/components/site/ProductCard";
-import { formatKES, products } from "@/data/products";
+import { formatKES, type Product } from "@/data/products";
+import { fetchProductBySlug } from "@/lib/catalog";
 import { Button } from "@/components/ui/button";
 import { Star, Truck, ShieldCheck, Sparkles, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
 
-export const Route = createFileRoute("/product/$id")({
-  loader: ({ params }) => {
-    const product = products.find((p) => p.id === params.id);
+const rootApi = getRouteApi("__root__");
+
+export const Route = createFileRoute("/product/$slug")({
+  loader: async ({ params }) => {
+    const product = await fetchProductBySlug(params.slug);
     if (!product) throw notFound();
     return { product };
   },
@@ -37,15 +40,26 @@ export const Route = createFileRoute("/product/$id")({
       </div>
     </div>
   ),
+  errorComponent: ({ error }) => (
+    <div className="min-h-screen">
+      <Header />
+      <div className="container-luxe py-32 text-center">
+        <h1 className="font-display text-3xl">Something went wrong</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+      </div>
+    </div>
+  ),
   component: ProductPage,
 });
 
 function ProductPage() {
   const { product } = Route.useLoaderData();
+  const allProducts = rootApi.useLoaderData() as Product[];
   const cart = useCart();
   const [qty, setQty] = useState(1);
 
-  const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const related = allProducts.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const outOfStock = product.stock <= 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -86,10 +100,12 @@ function ProductPage() {
             </div>
 
             <p className="mt-6 font-display text-3xl">{formatKES(product.price)}</p>
+            <p className={`mt-1 text-xs uppercase tracking-[0.2em] ${outOfStock ? "text-destructive" : "text-muted-foreground"}`}>
+              {outOfStock ? "Out of stock" : product.stock <= product.reorderThreshold ? `Only ${product.stock} left` : "In stock"}
+            </p>
 
             <p className="mt-6 max-w-prose text-sm leading-relaxed text-foreground/80">
-              A signature Crystal Crest formula — clean, considered, and crafted in small batches. Designed to slot
-              effortlessly into your daily ritual, with a finish that feels as good as it looks.
+              {product.description ?? "A signature Crystal Crest formula — clean, considered, and crafted in small batches."}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -98,20 +114,21 @@ function ProductPage() {
                   <Minus className="h-3.5 w-3.5" />
                 </button>
                 <span className="min-w-8 text-center text-sm">{qty}</span>
-                <button onClick={() => setQty((q) => q + 1)} className="p-2.5 hover:text-accent" aria-label="Increase">
+                <button onClick={() => setQty((q) => Math.min(product.stock || 99, q + 1))} className="p-2.5 hover:text-accent" aria-label="Increase">
                   <Plus className="h-3.5 w-3.5" />
                 </button>
               </div>
 
               <Button
                 size="lg"
-                className="flex-1 rounded-none bg-foreground text-background hover:bg-foreground/90"
+                disabled={outOfStock}
+                className="flex-1 rounded-none bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50"
                 onClick={() => {
                   cart.add(product, qty);
                   cart.setOpen(true);
                 }}
               >
-                Add to bag · {formatKES(product.price * qty)}
+                {outOfStock ? "Out of stock" : `Add to bag · ${formatKES(product.price * qty)}`}
               </Button>
             </div>
 
