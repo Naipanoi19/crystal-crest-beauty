@@ -56,7 +56,7 @@ function Shop() {
       <section className="container-luxe">
         <div className="flex flex-wrap items-center justify-between gap-4 border-y border-border py-4">
           <div className="flex flex-wrap gap-2">
-            <FilterChip active={category === "all"} onClick={() => navigate({ search: (p) => ({ ...p, category: "all" }) })}>
+            <FilterChip active={category === "all"} onClick={() => navigate({ search: (prev: typeof Route.types.fullSearchSchema) => ({ ...prev, category: "all" as const }) })}>
               All
             </FilterChip>
             {categories.map((c) => (
