@@ -63,7 +63,7 @@ function Shop() {
               <FilterChip
                 key={c.id}
                 active={category === c.id}
-                onClick={() => navigate({ search: (p) => ({ ...p, category: c.id }) })}
+                onClick={() => navigate({ search: (prev) => ({ ...prev, category: c.id }) })}
               >
                 {c.label}
               </FilterChip>
@@ -74,7 +74,7 @@ function Shop() {
             Sort
             <select
               value={sort}
-              onChange={(e) => navigate({ search: (p) => ({ ...p, sort: e.target.value as typeof sort }) })}
+              onChange={(e) => navigate({ search: (prev) => ({ ...prev, sort: e.target.value as typeof sort }) })}
               className="rounded-sm border border-border bg-background px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
             >
               <option value="featured">Featured</option>
