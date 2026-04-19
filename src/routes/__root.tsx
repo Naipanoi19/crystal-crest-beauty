@@ -1,4 +1,8 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { CartProvider } from "@/lib/cart";
+import { CartDrawer } from "@/components/site/CartDrawer";
+import { ChatWidget } from "@/components/site/ChatWidget";
+import { products } from "@/data/products";
 
 import appCss from "../styles.css?url";
 
@@ -65,5 +69,11 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <CartProvider products={products}>
+      <Outlet />
+      <CartDrawer />
+      <ChatWidget />
+    </CartProvider>
+  );
 }
