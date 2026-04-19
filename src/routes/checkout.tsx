@@ -44,10 +44,10 @@ function Checkout() {
       _payment_method: payment,
       _customer_name: name,
       _customer_phone: phone,
-      _customer_email: email || null,
-      _delivery_address: fulfillment === "delivery" ? address : null,
+      _customer_email: email || "",
+      _delivery_address: fulfillment === "delivery" ? address : "",
       _shipping_cents: shipping * 100,
-      _notes: notes || null,
+      _notes: notes || "",
       _items: cart.lines.map((l) => ({ product_id: l.product.id, quantity: l.qty })),
     });
     setBusy(false);

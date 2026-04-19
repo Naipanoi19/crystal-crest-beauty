@@ -31,8 +31,8 @@ function POS() {
     if (items.length === 0) return;
     const { data, error } = await supabase.rpc("place_order", {
       _channel: "pos", _fulfillment: "pickup", _payment_method: pay,
-      _customer_name: name, _customer_phone: phone, _customer_email: null,
-      _delivery_address: null, _shipping_cents: 0, _notes: null,
+      _customer_name: name, _customer_phone: phone, _customer_email: "",
+      _delivery_address: "", _shipping_cents: 0, _notes: "",
       _items: items.map((l) => ({ product_id: l.p.id, quantity: l.qty })),
     });
     if (error) { alert(error.message); return; }

@@ -16,7 +16,7 @@ function OrdersAdmin() {
   const load = () => supabase.from("orders").select("id, order_number, status, channel, fulfillment, payment_method, customer_name, customer_phone, total_cents, created_at").order("created_at", { ascending: false }).then(({ data }) => setRows(data ?? []));
   useEffect(() => { load(); }, []);
 
-  const advance = async (id: string, status: string) => {
+  const advance = async (id: string, status: "pending" | "paid" | "fulfilled" | "cancelled") => {
     await supabase.from("orders").update({ status }).eq("id", id);
     load();
   };
