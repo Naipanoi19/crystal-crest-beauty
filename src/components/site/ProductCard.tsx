@@ -5,11 +5,12 @@ import { useCart } from "@/lib/cart";
 
 export function ProductCard({ product }: { product: Product }) {
   const cart = useCart();
+  const out = product.stock <= 0;
   return (
     <article className="group flex flex-col">
       <Link
-        to="/product/$id"
-        params={{ id: product.id }}
+        to="/product/$slug"
+        params={{ slug: product.slug }}
         className="relative block aspect-[4/5] overflow-hidden rounded-sm bg-cream"
       >
         <img
@@ -25,19 +26,26 @@ export function ProductCard({ product }: { product: Product }) {
             {product.badge}
           </span>
         )}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            cart.add(product);
-            cart.setOpen(true);
-          }}
-          className="absolute inset-x-3 bottom-3 translate-y-2 rounded-sm bg-foreground py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-background opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-        >
-          Add to Bag
-        </button>
+        {out && (
+          <span className="absolute right-3 top-3 rounded-full bg-foreground/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-background">
+            Sold out
+          </span>
+        )}
+        {!out && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              cart.add(product);
+              cart.setOpen(true);
+            }}
+            className="absolute inset-x-3 bottom-3 translate-y-2 rounded-sm bg-foreground py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-background opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+          >
+            Add to Bag
+          </button>
+        )}
       </Link>
 
-      <Link to="/product/$id" params={{ id: product.id }} className="mt-4 flex flex-col gap-1">
+      <Link to="/product/$slug" params={{ slug: product.slug }} className="mt-4 flex flex-col gap-1">
         <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{product.category}</p>
         <h3 className="font-display text-lg text-foreground">{product.name}</h3>
         <p className="text-sm text-muted-foreground">{product.tagline}</p>
