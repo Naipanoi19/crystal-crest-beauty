@@ -56,14 +56,14 @@ function Shop() {
       <section className="container-luxe">
         <div className="flex flex-wrap items-center justify-between gap-4 border-y border-border py-4">
           <div className="flex flex-wrap gap-2">
-            <FilterChip active={category === "all"} onClick={() => navigate({ search: (prev: typeof Route.types.fullSearchSchema) => ({ ...prev, category: "all" as const }) })}>
+            <FilterChip active={category === "all"} onClick={() => navigate({ search: { category: "all", sort } })}>
               All
             </FilterChip>
             {categories.map((c) => (
               <FilterChip
                 key={c.id}
                 active={category === c.id}
-                onClick={() => navigate({ search: (prev) => ({ ...prev, category: c.id }) })}
+                onClick={() => navigate({ search: { category: c.id, sort } })}
               >
                 {c.label}
               </FilterChip>
@@ -74,7 +74,7 @@ function Shop() {
             Sort
             <select
               value={sort}
-              onChange={(e) => navigate({ search: (prev) => ({ ...prev, sort: e.target.value as typeof sort }) })}
+              onChange={(e) => navigate({ search: { category, sort: e.target.value as typeof sort } })}
               className="rounded-sm border border-border bg-background px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
             >
               <option value="featured">Featured</option>
