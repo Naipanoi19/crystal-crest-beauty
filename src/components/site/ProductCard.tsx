@@ -1,10 +1,17 @@
+import { Link } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 import { formatKES, type Product } from "@/data/products";
+import { useCart } from "@/lib/cart";
 
 export function ProductCard({ product }: { product: Product }) {
+  const cart = useCart();
   return (
     <article className="group flex flex-col">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-cream">
+      <Link
+        to="/product/$id"
+        params={{ id: product.id }}
+        className="relative block aspect-[4/5] overflow-hidden rounded-sm bg-cream"
+      >
         <img
           src={product.image}
           alt={product.name}
@@ -18,12 +25,19 @@ export function ProductCard({ product }: { product: Product }) {
             {product.badge}
           </span>
         )}
-        <button className="absolute inset-x-3 bottom-3 translate-y-2 rounded-sm bg-foreground py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-background opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            cart.add(product);
+            cart.setOpen(true);
+          }}
+          className="absolute inset-x-3 bottom-3 translate-y-2 rounded-sm bg-foreground py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-background opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+        >
           Add to Bag
         </button>
-      </div>
+      </Link>
 
-      <div className="mt-4 flex flex-col gap-1">
+      <Link to="/product/$id" params={{ id: product.id }} className="mt-4 flex flex-col gap-1">
         <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{product.category}</p>
         <h3 className="font-display text-lg text-foreground">{product.name}</h3>
         <p className="text-sm text-muted-foreground">{product.tagline}</p>
@@ -35,7 +49,7 @@ export function ProductCard({ product }: { product: Product }) {
             <span>({product.reviews})</span>
           </div>
         </div>
-      </div>
+      </Link>
     </article>
   );
 }
