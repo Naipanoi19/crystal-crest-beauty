@@ -8,7 +8,7 @@ import { Star, Truck, ShieldCheck, Sparkles, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
 
-export const Route = createFileRoute("/product/$id")({
+export const Route = createFileRoute("/product/$slug")({
   loader: ({ params }) => {
     const product = products.find((p) => p.id === params.id);
     if (!product) throw notFound();
