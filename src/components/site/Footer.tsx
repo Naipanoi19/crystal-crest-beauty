@@ -23,7 +23,7 @@ export function Footer() {
       <div className="hairline">
         <div className="container-luxe flex flex-col items-center justify-between gap-2 py-5 text-xs text-muted-foreground md:flex-row">
           <p>© {new Date().getFullYear()} Crystal Crest. All rights reserved.</p>
-          <p>Made with care · Nairobi, Kenya</p>
+          <p>Made with care · Kajiado, Kenya</p>
         </div>
       </div>
     </footer>
