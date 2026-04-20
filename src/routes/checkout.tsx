@@ -21,7 +21,7 @@ function Checkout() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [fulfillment, setFulfillment] = useState<Fulfillment>("delivery");
+  const [fulfillment, setFulfillment] = useState<Fulfillment>("pickup");
   const [payment, setPayment] = useState<Payment>("mpesa");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -82,8 +82,12 @@ function Checkout() {
             {/* Fulfillment */}
             <Section title="How would you like it?">
               <div className="grid gap-3 sm:grid-cols-2">
-                <Choice active={fulfillment === "delivery"} onClick={() => setFulfillment("delivery")} title="Delivery" desc="Same-day Nairobi · 1–3 days countrywide" />
-                <Choice active={fulfillment === "pickup"} onClick={() => setFulfillment("pickup")} title="In-store pickup" desc="Westlands studio · ready in 2 hours" />
+                <Choice active={fulfillment === "pickup"} onClick={() => setFulfillment("pickup")} title="In-store pickup" desc="Kajiado town · opposite Crapas Hotel" />
+                <button type="button" disabled
+                  className="cursor-not-allowed rounded-sm border border-dashed border-border bg-background/40 p-4 text-left opacity-70">
+                  <p className="font-display text-lg">Delivery <span className="ml-1 text-[10px] uppercase tracking-[0.2em] text-accent">Coming soon</span></p>
+                  <p className="mt-1 text-xs text-muted-foreground">We're setting up countrywide delivery. For now, please collect in-store.</p>
+                </button>
               </div>
             </Section>
 
