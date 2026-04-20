@@ -5,17 +5,25 @@ export function Footer() {
         <div>
           <p className="font-display text-lg">Crystal <span className="text-accent">Crest</span></p>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-            Considered beauty for the everyday ritual. Curated in Nairobi, shipped countrywide.
+            Considered beauty for the everyday ritual. Visit us in-store — delivery coming soon.
           </p>
         </div>
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-foreground/70">Visit us</p>
+          <address className="mt-4 text-sm not-italic text-muted-foreground">
+            Crystal Crest Studio<br />
+            Kajiado Town<br />
+            Opposite Crapas Hotel<br />
+            <span className="mt-2 block text-foreground/80">In-store pickup only</span>
+          </address>
+        </div>
         <FooterCol title="Shop" items={["Skincare", "Makeup", "Hair Care", "Nails"]} />
-        <FooterCol title="Help" items={["Shipping", "Returns", "Contact", "FAQ"]} />
-        <FooterCol title="Studio" items={["Our Story", "Journal", "Stockists", "Press"]} />
+        <FooterCol title="Help" items={["Pickup info", "Returns", "Contact", "FAQ"]} />
       </div>
       <div className="hairline">
         <div className="container-luxe flex flex-col items-center justify-between gap-2 py-5 text-xs text-muted-foreground md:flex-row">
           <p>© {new Date().getFullYear()} Crystal Crest. All rights reserved.</p>
-          <p>Made with care · Nairobi, Kenya</p>
+          <p>Made with care · Kajiado, Kenya</p>
         </div>
       </div>
     </footer>
