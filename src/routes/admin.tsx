@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useNavigate, useLocation } from "@tansta
 import { useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { Header } from "@/components/site/Header";
-import { LayoutDashboard, Package, ShoppingCart, MessageSquare, Boxes, ScanBarcode } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, MessageSquare, Boxes, ScanBarcode, FileSpreadsheet } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Crystal Crest" }] }),
@@ -15,6 +15,7 @@ const tabs: { to: string; label: string; icon: typeof LayoutDashboard; end?: boo
   { to: "/admin/inventory", label: "Inventory", icon: Boxes },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { to: "/admin/pos", label: "POS", icon: ScanBarcode },
+  { to: "/admin/uploads", label: "Excel uploads", icon: FileSpreadsheet },
   { to: "/admin/feedback", label: "Feedback", icon: MessageSquare },
 ];
 
