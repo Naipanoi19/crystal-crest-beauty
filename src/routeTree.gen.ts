@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReturnsRouteImport } from './routes/returns'
 import { Route as PickupRouteImport } from './routes/pickup'
@@ -31,6 +32,11 @@ import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminInventoryRouteImport } from './routes/admin.inventory'
 import { Route as AdminFeedbackRouteImport } from './routes/admin.feedback'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/pickup': typeof PickupRoute
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/pickup': typeof PickupRoute
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/pickup': typeof PickupRoute
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/pickup'
     | '/returns'
     | '/shop'
+    | '/wishlist'
     | '/admin/feedback'
     | '/admin/inventory'
     | '/admin/orders'
@@ -244,6 +254,7 @@ export interface FileRouteTypes {
     | '/pickup'
     | '/returns'
     | '/shop'
+    | '/wishlist'
     | '/admin/feedback'
     | '/admin/inventory'
     | '/admin/orders'
@@ -267,6 +278,7 @@ export interface FileRouteTypes {
     | '/pickup'
     | '/returns'
     | '/shop'
+    | '/wishlist'
     | '/admin/feedback'
     | '/admin/inventory'
     | '/admin/orders'
@@ -291,11 +303,19 @@ export interface RootRouteChildren {
   PickupRoute: typeof PickupRoute
   ReturnsRoute: typeof ReturnsRoute
   ShopRoute: typeof ShopRoute
+  WishlistRoute: typeof WishlistRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shop': {
       id: '/shop'
       path: '/shop'
@@ -482,6 +502,7 @@ const rootRouteChildren: RootRouteChildren = {
   PickupRoute: PickupRoute,
   ReturnsRoute: ReturnsRoute,
   ShopRoute: ShopRoute,
+  WishlistRoute: WishlistRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport
