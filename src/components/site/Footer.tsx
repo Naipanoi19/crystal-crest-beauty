@@ -8,7 +8,7 @@ export function Footer() {
         <div>
           <p className="font-display text-lg">Crystal <span className="text-accent">Crest</span></p>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-            Considered beauty for the everyday ritual. Visit us in-store — delivery coming soon.
+            Considered beauty for the everyday ritual. 48h Nairobi delivery · 1–3 days countrywide.
           </p>
           <div className="mt-4 flex gap-3">
             <a aria-label="Instagram" href="https://instagram.com/" target="_blank" rel="noreferrer" className="grid h-8 w-8 place-items-center rounded-full border border-border transition hover:border-foreground hover:text-foreground"><Instagram className="h-4 w-4" /></a>

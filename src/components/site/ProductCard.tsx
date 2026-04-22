@@ -26,12 +26,21 @@ export function ProductCard({ product }: { product: Product }) {
             {product.badge}
           </span>
         )}
-        {out && (
-          <span className="absolute right-3 top-3 rounded-full bg-foreground/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-background">
-            Sold out
-          </span>
-        )}
-        {!out && (
+        {out ? (
+          <>
+            <span className="absolute right-3 top-3 rounded-full bg-foreground/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-background">
+              Sold out
+            </span>
+            <button
+              type="button"
+              disabled
+              onClick={(e) => e.preventDefault()}
+              className="absolute inset-x-3 bottom-3 cursor-not-allowed rounded-sm bg-muted py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"
+            >
+              Sold Out
+            </button>
+          </>
+        ) : (
           <button
             onClick={(e) => {
               e.preventDefault();

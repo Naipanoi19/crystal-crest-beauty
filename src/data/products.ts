@@ -1,7 +1,4 @@
 import serum from "@/assets/p-serum.jpg";
-import lipstick from "@/assets/p-lipstick.jpg";
-import hairoil from "@/assets/p-hairoil.jpg";
-import polish from "@/assets/p-polish.jpg";
 
 export type Category = "skincare" | "makeup" | "hair" | "nails";
 
@@ -30,16 +27,16 @@ export const categories: { id: Category; label: string; description: string }[] 
   { id: "nails",    label: "Nails",    description: "Polish & treatments" },
 ];
 
-// Slug → bundled image (so DB doesn't need to ship binary URLs)
+// Unique Unsplash placeholder per product slug
 export const productImageBySlug: Record<string, string> = {
-  "velvet-glow-serum": serum,
-  "midnight-repair-drops": serum,
-  "rose-petal-matte-lip": lipstick,
-  "crystal-crest-lip-tint": lipstick,
-  "argan-silk-hair-oil": hairoil,
-  "silk-scalp-elixir": hairoil,
-  "blush-creme-polish": polish,
-  "petal-glaze-top-coat": polish,
+  "velvet-glow-serum":      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80",
+  "midnight-repair-drops":  "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800&q=80",
+  "rose-petal-matte-lip":   "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=800&q=80",
+  "crystal-crest-lip-tint": "https://images.unsplash.com/photo-1599733589046-8a35aa8b08e1?auto=format&fit=crop&w=800&q=80",
+  "argan-silk-hair-oil":    "https://images.unsplash.com/photo-1626015449304-9077d3957a07?auto=format&fit=crop&w=800&q=80",
+  "silk-scalp-elixir":      "https://images.unsplash.com/photo-1585870683043-49108d0b181a?auto=format&fit=crop&w=800&q=80",
+  "blush-creme-polish":     "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
+  "petal-glaze-top-coat":   "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=800&q=80",
 };
 
 export const fallbackImage = serum;
