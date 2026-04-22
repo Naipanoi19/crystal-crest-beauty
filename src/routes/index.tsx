@@ -1,6 +1,5 @@
 import { createFileRoute, Link, getRouteApi } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import hero from "@/assets/hero-beauty.jpg";
+import { ArrowRight, Sparkles, Truck, ShieldCheck, Star, Quote } from "lucide-react";
 import catSkin from "@/assets/cat-skincare.jpg";
 import catMakeup from "@/assets/cat-makeup.jpg";
 import catHair from "@/assets/cat-hair.jpg";
@@ -12,13 +11,32 @@ import type { Product } from "@/data/products";
 
 const rootApi = getRouteApi("__root__");
 
+const HERO_IMG = "https://images.unsplash.com/photo-1522335789203-aaa42acce93b?auto=format&fit=crop&w=2000&q=85";
+
+const IG_IMAGES = [
+  "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
+];
+
+const TESTIMONIALS = [
+  { name: "Wanjiru K.", city: "Nairobi", rating: 5, body: "Velvet Glow Serum is unreal. My skin looks like I slept for 12 hours, every day. The packaging alone makes me feel rich." },
+  { name: "Amina H.", city: "Mombasa", rating: 5, body: "Fast delivery, beautifully wrapped, and the matte lip is the most comfortable I've ever worn. Crystal Crest has my heart." },
+  { name: "Cynthia M.", city: "Kisumu", rating: 5, body: "I trust everything they curate. Argan Silk Hair Oil saved my dry ends. The team also actually replies on WhatsApp — rare." },
+  { name: "Lisa O.", city: "Kajiado", rating: 5, body: "Walked into the studio for pickup, left with a full ritual. Felt like a private boutique experience. Will be back." },
+];
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Crystal Crest — Considered beauty, curated in Nairobi" },
-      { name: "description", content: "Skincare, makeup, hair and nail products from Crystal Crest. Shop bestsellers, discover rituals, and arrange in-store pickup or delivery." },
+      { title: "Crystal Crest — Considered beauty, curated in Kenya" },
+      { name: "description", content: "Skincare, makeup, hair and nail products from Crystal Crest. Shop bestsellers, discover rituals, arrange in-store pickup." },
       { property: "og:title", content: "Crystal Crest — Considered beauty" },
       { property: "og:description", content: "Curated skincare, makeup, hair and nails. Shop now." },
+      { property: "og:image", content: HERO_IMG },
     ],
   }),
   component: Index,
@@ -34,67 +52,74 @@ const categoryCards = [
 function Index() {
   const products = rootApi.useLoaderData() as Product[];
   const featured = products.slice(0, 4);
+  const newArrivals = [...products].slice(0, 8);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* HERO */}
-      <section className="relative">
-        <div className="container-luxe grid gap-10 py-16 md:grid-cols-2 md:items-center md:py-24">
-          <div className="max-w-xl">
-            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">Spring Edit · 2026</p>
-            <h1 className="mt-5 font-display text-5xl leading-[1.05] text-foreground text-balance md:text-7xl">
+      {/* HERO — full screen cinematic */}
+      <section className="relative h-[calc(100vh-4rem)] min-h-[640px] w-full overflow-hidden">
+        <img src={HERO_IMG} alt="Editorial beauty close-up" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/30 via-charcoal/40 to-charcoal/80" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="container-luxe text-center text-ivory">
+            <p className="animate-fade-up text-[11px] font-medium uppercase tracking-[0.4em] text-accent">Spring Edit · 2026</p>
+            <h1 className="mx-auto mt-6 max-w-4xl animate-fade-up font-display text-5xl leading-[1.02] text-balance md:text-7xl lg:text-[88px]" style={{ animationDelay: "120ms" }}>
               Quiet luxury for every ritual.
             </h1>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
-              Considered formulas, beautiful objects. Crystal Crest brings together
-              the world's finest skincare, makeup, hair and nail essentials — curated for
-              the way you actually live.
+            <p className="mx-auto mt-6 max-w-xl animate-fade-up text-base leading-relaxed text-ivory/85 md:text-lg" style={{ animationDelay: "240ms" }}>
+              Considered formulas. Beautiful objects. Curated for the way you actually live.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-10 flex animate-fade-up flex-wrap items-center justify-center gap-3" style={{ animationDelay: "360ms" }}>
               <Link
                 to="/shop"
-                search={{ category: "all" }}
-                className="inline-flex items-center gap-2 rounded-sm bg-foreground px-7 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-background transition hover:bg-foreground/85"
+                search={{ category: "all", sort: "featured" }}
+                className="inline-flex items-center gap-2 rounded-sm bg-gradient-rose px-8 py-4 text-xs font-medium uppercase tracking-[0.24em] text-white shadow-luxe transition hover:opacity-95"
               >
                 Shop the Edit <ArrowRight className="h-3.5 w-3.5" />
               </Link>
               <Link
                 to="/shop"
-                search={{ category: "skincare" }}
-                className="inline-flex items-center gap-2 rounded-sm border border-foreground/20 px-7 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-foreground transition hover:border-foreground"
+                search={{ category: "skincare", sort: "featured" }}
+                className="inline-flex items-center gap-2 rounded-sm border border-ivory/40 px-8 py-4 text-xs font-medium uppercase tracking-[0.24em] text-ivory transition hover:border-accent hover:text-accent"
               >
                 Bestsellers
               </Link>
             </div>
-            <div className="mt-12 flex items-center gap-8 text-xs text-muted-foreground">
-              <Stat n={`${products.length}`} label="Curated products" />
-              <Stat n="4.8★" label="Customer rating" />
-              <Stat n="48h" label="Nairobi delivery" />
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="absolute -inset-4 -z-10 rounded-sm bg-blush/40 blur-2xl" />
-            <img
-              src={hero}
-              alt="Curated beauty products on a cream backdrop"
-              width={1600}
-              height={1200}
-              className="aspect-[5/4] w-full rounded-sm object-cover shadow-[0_30px_80px_-30px_rgba(120,60,40,0.35)]"
-            />
           </div>
         </div>
       </section>
 
+      {/* NEW ARRIVALS RIBBON */}
+      <section className="relative overflow-hidden border-y border-border bg-charcoal py-4">
+        <div className="flex w-max animate-marquee items-center gap-12 whitespace-nowrap text-ivory">
+          {[...Array(2)].map((_, dup) => (
+            <div key={dup} className="flex items-center gap-12">
+              {newArrivals.map((p) => (
+                <Link
+                  key={`${dup}-${p.id}`}
+                  to="/product/$slug"
+                  params={{ slug: p.slug }}
+                  className="group flex items-center gap-3 transition hover:text-accent"
+                >
+                  <Sparkles className="h-3.5 w-3.5 text-accent" />
+                  <span className="text-[11px] font-medium uppercase tracking-[0.32em]">New · {p.name}</span>
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CATEGORIES */}
-      <section className="container-luxe py-16 md:py-24">
+      <section className="container-luxe py-20 md:py-28">
         <div className="flex items-end justify-between">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">The Edit</p>
             <h2 className="mt-3 font-display text-4xl text-foreground md:text-5xl">Shop by category</h2>
           </div>
-          <Link to="/shop" search={{ category: "all" }} className="hidden text-xs font-medium uppercase tracking-[0.2em] text-foreground/70 hover:text-foreground md:inline-flex md:items-center md:gap-1">
+          <Link to="/shop" search={{ category: "all", sort: "featured" }} className="hidden text-xs font-medium uppercase tracking-[0.2em] text-foreground/70 hover:text-accent md:inline-flex md:items-center md:gap-1">
             All products <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -104,23 +129,38 @@ function Index() {
             <Link
               key={c.id}
               to="/shop"
-              search={{ category: c.id }}
-              className="group relative block aspect-[4/5] overflow-hidden rounded-sm bg-cream"
+              search={{ category: c.id, sort: "featured" }}
+              className="group relative block aspect-[4/5] overflow-hidden rounded-sm bg-cream shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-card-hover"
             >
               <img src={c.img} alt={c.label} loading="lazy" width={800} height={1000}
-                className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.05]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/55 via-transparent to-transparent" />
-              <div className="absolute inset-x-5 bottom-5 flex items-end justify-between text-background">
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/65 via-transparent to-transparent" />
+              <div className="absolute inset-x-5 bottom-5 flex items-end justify-between text-ivory">
                 <p className="font-display text-2xl">{c.label}</p>
-                <ArrowRight className="h-4 w-4 translate-x-0 transition group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
               </div>
             </Link>
           ))}
         </div>
       </section>
 
+      {/* WHY CRYSTAL CREST */}
+      <section className="bg-gradient-champagne py-20 md:py-28">
+        <div className="container-luxe">
+          <div className="text-center">
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">The Promise</p>
+            <h2 className="mt-3 font-display text-4xl text-foreground md:text-5xl">Why Crystal Crest</h2>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            <WhyCard icon={<ShieldCheck className="h-6 w-6" />} title="Authentic, always" body="Sourced directly from authorised distributors. Every batch verified, every seal intact." />
+            <WhyCard icon={<Truck className="h-6 w-6" />} title="Considered delivery" body="48h within Nairobi, 1–3 days countrywide. Pickup at our Kajiado studio anytime." />
+            <WhyCard icon={<Sparkles className="h-6 w-6" />} title="Expert curation" body="Hand-picked by our beauty team. Nothing on the shelf we wouldn't use ourselves." />
+          </div>
+        </div>
+      </section>
+
       {/* FEATURED */}
-      <section className="container-luxe py-16 md:py-24">
+      <section className="container-luxe py-20 md:py-28">
         <div className="flex items-end justify-between">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">Loved Right Now</p>
@@ -132,12 +172,60 @@ function Index() {
         </div>
       </section>
 
-      {/* PROMISE STRIP */}
-      <section className="border-y border-border bg-cream">
-        <div className="container-luxe grid gap-8 py-12 md:grid-cols-3 md:py-14">
-          <Promise title="Authentic, always" body="Sourced directly from brands and verified suppliers." />
-          <Promise title="Express delivery" body="Same-day in Nairobi · 1–3 days countrywide." />
-          <Promise title="In-store pickup" body="Schedule a pickup at our Westlands studio." />
+      {/* TESTIMONIALS */}
+      <section className="bg-charcoal py-20 text-ivory md:py-28">
+        <div className="container-luxe">
+          <div className="text-center">
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">Real Voices</p>
+            <h2 className="mt-3 font-display text-4xl md:text-5xl">Loved across Kenya</h2>
+          </div>
+
+          <div className="mt-12 -mx-5 overflow-x-auto px-5 no-scrollbar">
+            <div className="flex w-max gap-6 pb-2">
+              {TESTIMONIALS.map((t) => (
+                <figure key={t.name} className="w-[320px] shrink-0 rounded-sm border border-white/10 bg-white/5 p-7 backdrop-blur sm:w-[380px]">
+                  <Quote className="h-6 w-6 text-accent" />
+                  <div className="mt-4 flex">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className={`h-3.5 w-3.5 ${i < t.rating ? "fill-accent stroke-accent" : "stroke-white/30"}`} />
+                    ))}
+                  </div>
+                  <blockquote className="mt-4 font-display text-xl leading-snug text-ivory">"{t.body}"</blockquote>
+                  <figcaption className="mt-6 text-xs uppercase tracking-[0.22em] text-ivory/70">
+                    {t.name} · {t.city}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* INSTAGRAM GRID */}
+      <section className="container-luxe py-20 md:py-28">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">@crystalcrest</p>
+            <h2 className="mt-3 font-display text-4xl text-foreground md:text-5xl">The Crystal Crest Life</h2>
+          </div>
+          <a href="https://instagram.com/" target="_blank" rel="noreferrer" className="hidden text-xs uppercase tracking-[0.2em] text-foreground/70 hover:text-accent md:inline-flex md:items-center md:gap-1">
+            Follow us <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
+
+        <div className="mt-10 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
+          {IG_IMAGES.map((src, i) => (
+            <a
+              key={i}
+              href="https://instagram.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative block aspect-square overflow-hidden rounded-sm bg-cream"
+            >
+              <img src={src} alt={`Crystal Crest moment ${i + 1}`} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.08]" />
+              <div className="absolute inset-0 bg-charcoal/0 transition group-hover:bg-charcoal/30" />
+            </a>
+          ))}
         </div>
       </section>
 
@@ -146,20 +234,14 @@ function Index() {
   );
 }
 
-function Stat({ n, label }: { n: string; label: string }) {
+function WhyCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
-    <div>
-      <p className="font-display text-2xl text-foreground">{n}</p>
-      <p className="mt-1 uppercase tracking-[0.2em]">{label}</p>
-    </div>
-  );
-}
-
-function Promise({ title, body }: { title: string; body: string }) {
-  return (
-    <div>
-      <p className="font-display text-xl text-foreground">{title}</p>
-      <p className="mt-2 text-sm text-muted-foreground">{body}</p>
+    <div className="group rounded-sm border border-border/60 bg-background/70 p-8 text-center shadow-card transition duration-500 hover:-translate-y-1 hover:shadow-card-hover">
+      <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gradient-rose text-white shadow-luxe">
+        {icon}
+      </div>
+      <p className="mt-5 font-display text-xl text-foreground">{title}</p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
     </div>
   );
 }

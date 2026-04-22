@@ -2,13 +2,13 @@
 @source "../src";
 @import "tw-animate-css";
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --font-display: "Playfair Display", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -38,6 +38,10 @@
   --color-ring: var(--ring);
   --color-cream: var(--cream);
   --color-rose-gold: var(--rose-gold);
+  --color-rose-gold-soft: var(--rose-gold-soft);
+  --color-champagne: var(--champagne);
+  --color-ivory: var(--ivory);
+  --color-charcoal: var(--charcoal);
   --color-blush: var(--blush);
   --color-ink: var(--ink);
 }
@@ -45,59 +49,74 @@
 :root {
   --radius: 0.25rem;
 
-  /* Crystal Crest — luxe minimal palette */
-  --background: oklch(0.985 0.012 80);          /* ivory cream */
-  --foreground: oklch(0.22 0.02 30);            /* deep ink */
-  --cream: oklch(0.97 0.018 75);
-  --ink: oklch(0.18 0.015 30);
-  --blush: oklch(0.93 0.035 20);
-  --rose-gold: oklch(0.72 0.085 35);
+  /* Crystal Crest — Luxe palette
+     rose-gold #C9967A, champagne #F5ECD7, ivory #FDFAF5, charcoal #1C1C1E */
+  --ivory:      oklch(0.985 0.008 80);
+  --champagne:  oklch(0.945 0.038 85);
+  --rose-gold:  oklch(0.72 0.075 45);
+  --rose-gold-soft: oklch(0.86 0.045 50);
+  --charcoal:   oklch(0.20 0.005 280);
+
+  --background: var(--ivory);
+  --foreground: var(--charcoal);
+  --cream:      var(--champagne);
+  --ink:        var(--charcoal);
+  --blush:      oklch(0.93 0.035 30);
 
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
 
-  --primary: oklch(0.22 0.02 30);                /* ink as primary action */
-  --primary-foreground: oklch(0.985 0.012 80);
+  --primary: var(--charcoal);
+  --primary-foreground: var(--ivory);
 
-  --secondary: oklch(0.95 0.018 70);
+  --secondary: oklch(0.96 0.022 80);
   --secondary-foreground: var(--foreground);
 
   --muted: oklch(0.95 0.012 70);
-  --muted-foreground: oklch(0.45 0.015 35);
+  --muted-foreground: oklch(0.45 0.012 35);
 
-  --accent: oklch(0.72 0.085 35);                /* rose gold accent */
+  --accent: var(--rose-gold);
   --accent-foreground: oklch(0.99 0.005 80);
 
   --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: oklch(0.99 0.005 80);
 
-  --border: oklch(0.9 0.015 60);
-  --input: oklch(0.9 0.015 60);
-  --ring: oklch(0.72 0.085 35);
+  --border: oklch(0.9 0.012 60);
+  --input: oklch(0.9 0.012 60);
+  --ring: var(--rose-gold);
+
+  /* gradients & shadows */
+  --gradient-rose: linear-gradient(135deg, oklch(0.78 0.08 45), oklch(0.68 0.085 35));
+  --gradient-champagne: linear-gradient(180deg, var(--champagne), var(--ivory));
+  --gradient-hero: linear-gradient(180deg, oklch(0 0 0 / 0.05) 0%, oklch(0 0 0 / 0.45) 100%);
+  --shadow-luxe: 0 24px 60px -28px oklch(0.20 0.04 35 / 0.35);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.04), 0 18px 40px -24px oklch(0.20 0.04 35 / 0.18);
+  --shadow-card-hover: 0 4px 8px oklch(0 0 0 / 0.06), 0 30px 60px -28px oklch(0.20 0.04 35 / 0.32);
+  --transition-luxe: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --background: oklch(0.18 0.015 30);
-  --foreground: oklch(0.97 0.012 80);
-  --card: oklch(0.22 0.015 30);
+  --background: var(--charcoal);
+  --foreground: var(--ivory);
+  --card: oklch(0.24 0.006 280);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.22 0.015 30);
+  --popover: oklch(0.24 0.006 280);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.97 0.012 80);
-  --primary-foreground: oklch(0.18 0.015 30);
-  --secondary: oklch(0.28 0.015 30);
+  --primary: var(--ivory);
+  --primary-foreground: var(--charcoal);
+  --secondary: oklch(0.28 0.008 280);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.28 0.015 30);
-  --muted-foreground: oklch(0.7 0.015 60);
-  --accent: oklch(0.72 0.085 35);
-  --accent-foreground: oklch(0.18 0.015 30);
+  --muted: oklch(0.28 0.008 280);
+  --muted-foreground: oklch(0.7 0.012 60);
+  --accent: var(--rose-gold);
+  --accent-foreground: var(--charcoal);
   --destructive: oklch(0.6 0.2 25);
   --destructive-foreground: oklch(0.99 0.005 80);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.72 0.085 35);
+  --ring: var(--rose-gold);
 }
 
 @layer base {
@@ -114,7 +133,7 @@
 
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
 }
 
@@ -131,4 +150,40 @@
   .hairline { border-top: 1px solid var(--color-border); }
 
   .text-balance { text-wrap: balance; }
+
+  .glass-nav {
+    background: oklch(from var(--ivory) l c h / 0.72);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+  }
+
+  .bg-gradient-rose { background: var(--gradient-rose); }
+  .bg-gradient-champagne { background: var(--gradient-champagne); }
+
+  .shadow-luxe { box-shadow: var(--shadow-luxe); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-card-hover { box-shadow: var(--shadow-card-hover); }
+
+  /* marquee for new arrivals ribbon */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee { animation: marquee 38s linear infinite; }
+  .animate-marquee-slow { animation: marquee 60s linear infinite; }
+
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-up { animation: fade-up 0.7s var(--transition-luxe) both; }
+
+  @keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
 }
+
+/* hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
