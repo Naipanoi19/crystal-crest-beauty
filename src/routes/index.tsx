@@ -68,7 +68,7 @@ function Index() {
               </Link>
             </div>
             <div className="mt-12 flex items-center gap-8 text-xs text-muted-foreground">
-              <Stat n="240+" label="Curated products" />
+              <Stat n={`${products.length}`} label="Curated products" />
               <Stat n="4.8★" label="Customer rating" />
               <Stat n="48h" label="Nairobi delivery" />
             </div>
