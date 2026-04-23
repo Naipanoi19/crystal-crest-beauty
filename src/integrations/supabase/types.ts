@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_messages: {
+        Row: {
+          contact: string
+          created_at: string
+          id: string
+          message: string
+          sender_name: string
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          contact: string
+          created_at?: string
+          id?: string
+          message: string
+          sender_name: string
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Update: {
+          contact?: string
+          created_at?: string
+          id?: string
+          message?: string
+          sender_name?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feedback: {
         Row: {
           created_at: string
@@ -118,8 +151,36 @@ export type Database = {
           },
         ]
       }
+      order_status_history: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          note: string | null
+          order_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          order_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          order_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
+          admin_status: Database["public"]["Enums"]["admin_order_status"]
           channel: Database["public"]["Enums"]["order_channel"]
           created_at: string
           customer_email: string | null
@@ -140,6 +201,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          admin_status?: Database["public"]["Enums"]["admin_order_status"]
           channel?: Database["public"]["Enums"]["order_channel"]
           created_at?: string
           customer_email?: string | null
@@ -160,6 +222,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          admin_status?: Database["public"]["Enums"]["admin_order_status"]
           channel?: Database["public"]["Enums"]["order_channel"]
           created_at?: string
           customer_email?: string | null
@@ -183,11 +246,13 @@ export type Database = {
       }
       products: {
         Row: {
+          admin_status: string
           badge: string | null
           category: Database["public"]["Enums"]["product_category"]
           created_at: string
           description: string | null
           id: string
+          image_data_url: string | null
           image_url: string
           is_active: boolean
           last_sold_at: string | null
@@ -202,11 +267,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          admin_status?: string
           badge?: string | null
           category: Database["public"]["Enums"]["product_category"]
           created_at?: string
           description?: string | null
           id?: string
+          image_data_url?: string | null
           image_url: string
           is_active?: boolean
           last_sold_at?: string | null
@@ -221,11 +288,13 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          admin_status?: string
           badge?: string | null
           category?: Database["public"]["Enums"]["product_category"]
           created_at?: string
           description?: string | null
           id?: string
+          image_data_url?: string | null
           image_url?: string
           is_active?: boolean
           last_sold_at?: string | null
@@ -265,6 +334,81 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      store_categories: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -318,6 +462,12 @@ export type Database = {
       }
     }
     Enums: {
+      admin_order_status:
+        | "pending"
+        | "confirmed"
+        | "ready_for_pickup"
+        | "collected"
+        | "cancelled"
       app_role: "admin" | "customer"
       fulfillment_method: "delivery" | "pickup"
       order_channel: "online" | "pos"
@@ -451,6 +601,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      admin_order_status: [
+        "pending",
+        "confirmed",
+        "ready_for_pickup",
+        "collected",
+        "cancelled",
+      ],
       app_role: ["admin", "customer"],
       fulfillment_method: ["delivery", "pickup"],
       order_channel: ["online", "pos"],
