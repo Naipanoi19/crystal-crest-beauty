@@ -1,73 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { formatKES } from "@/data/products";
-import { Button } from "@/components/ui/button";
+import { Plus, Pencil, Trash2 } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { adminDb, fileToDataUrl, money, slugify, type AdminProduct, type StoreCategory } from "@/lib/admin";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/admin/products")({ component: ProductsAdmin });
 
-interface PRow {
-  id: string; name: string; slug: string; category: string; price_cents: number;
-  stock: number; reorder_threshold: number; is_active: boolean;
-}
+type Draft = { name: string; category: string; price: number; tagline: string; stock: number; badge: string; status: "active" | "sold_out"; image: string };
+const empty: Draft = { name: "", category: "skincare", price: 0, tagline: "", stock: 0, badge: "", status: "active", image: "" };
 
 function ProductsAdmin() {
-  const [rows, setRows] = useState<PRow[]>([]);
-  const [editing, setEditing] = useState<string | null>(null);
-  const [draft, setDraft] = useState<{ price: number; stock: number; reorder: number; active: boolean }>({ price: 0, stock: 0, reorder: 0, active: true });
-
-  const load = async () => {
-    const { data } = await supabase.from("products").select("id, name, slug, category, price_cents, stock, reorder_threshold, is_active").order("name");
-    setRows(data ?? []);
-  };
+  const [rows, setRows] = useState<AdminProduct[]>([]); const [cats, setCats] = useState<StoreCategory[]>([]);
+  const [open, setOpen] = useState(false); const [editing, setEditing] = useState<AdminProduct | null>(null); const [draft, setDraft] = useState<Draft>(empty);
+  const load = async () => { const [p, c]: any[] = await Promise.all([adminDb.from("products").select("*").order("name"), adminDb.from("store_categories").select("*").order("name")]); setRows(p.data ?? []); setCats(c.data ?? []); };
   useEffect(() => { load(); }, []);
-
-  const startEdit = (r: PRow) => {
-    setEditing(r.id);
-    setDraft({ price: Math.round(r.price_cents / 100), stock: r.stock, reorder: r.reorder_threshold, active: r.is_active });
-  };
-  const save = async (id: string) => {
-    await supabase.from("products").update({
-      price_cents: draft.price * 100, stock: draft.stock, reorder_threshold: draft.reorder, is_active: draft.active,
-    }).eq("id", id);
-    setEditing(null);
-    load();
-  };
-
-  return (
-    <div>
-      <h2 className="font-display text-2xl">Catalog</h2>
-      <p className="text-sm text-muted-foreground">Edit price, stock and reorder threshold inline.</p>
-      <div className="mt-6 overflow-x-auto border border-border">
-        <table className="w-full text-sm">
-          <thead className="bg-cream/50 text-left text-xs uppercase tracking-[0.18em] text-muted-foreground">
-            <tr><th className="px-3 py-3">Product</th><th className="px-3 py-3">Category</th><th className="px-3 py-3">Price (KES)</th><th className="px-3 py-3">Stock</th><th className="px-3 py-3">Reorder ≤</th><th className="px-3 py-3">Active</th><th className="px-3 py-3"></th></tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {rows.map((r) => editing === r.id ? (
-              <tr key={r.id} className="bg-blush/20">
-                <td className="px-3 py-2">{r.name}</td>
-                <td className="px-3 py-2 capitalize">{r.category}</td>
-                <td className="px-3 py-2"><input type="number" value={draft.price} onChange={(e) => setDraft({ ...draft, price: +e.target.value })} className="w-24 rounded-sm border border-border bg-background px-2 py-1" /></td>
-                <td className="px-3 py-2"><input type="number" value={draft.stock} onChange={(e) => setDraft({ ...draft, stock: +e.target.value })} className="w-20 rounded-sm border border-border bg-background px-2 py-1" /></td>
-                <td className="px-3 py-2"><input type="number" value={draft.reorder} onChange={(e) => setDraft({ ...draft, reorder: +e.target.value })} className="w-20 rounded-sm border border-border bg-background px-2 py-1" /></td>
-                <td className="px-3 py-2"><input type="checkbox" checked={draft.active} onChange={(e) => setDraft({ ...draft, active: e.target.checked })} /></td>
-                <td className="px-3 py-2 text-right"><Button size="sm" onClick={() => save(r.id)}>Save</Button> <Button size="sm" variant="outline" onClick={() => setEditing(null)}>Cancel</Button></td>
-              </tr>
-            ) : (
-              <tr key={r.id}>
-                <td className="px-3 py-3">{r.name}</td>
-                <td className="px-3 py-3 capitalize">{r.category}</td>
-                <td className="px-3 py-3">{formatKES(Math.round(r.price_cents / 100))}</td>
-                <td className={`px-3 py-3 ${r.stock <= r.reorder_threshold ? "text-destructive" : ""}`}>{r.stock}</td>
-                <td className="px-3 py-3">{r.reorder_threshold}</td>
-                <td className="px-3 py-3">{r.is_active ? "Yes" : "No"}</td>
-                <td className="px-3 py-3 text-right"><Button size="sm" variant="outline" onClick={() => startEdit(r)}>Edit</Button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+  function start(row?: AdminProduct) { setEditing(row ?? null); setDraft(row ? { name: row.name, category: row.category, price: Math.round(row.price_cents / 100), tagline: row.tagline, stock: row.stock, badge: row.badge ?? "", status: row.stock <= 0 || row.admin_status === "sold_out" ? "sold_out" : "active", image: row.image_data_url || row.image_url || "" } : empty); setOpen(true); }
+  async function save(e: FormEvent) { e.preventDefault(); const stock = Math.max(0, Number(draft.stock)); const payload = { name: draft.name.trim(), slug: editing?.slug ?? slugify(draft.name), category: draft.category, tagline: draft.tagline.trim().slice(0, 60) || "Crystal Crest beauty essential", description: draft.tagline.trim().slice(0, 60), price_cents: Math.round(Number(draft.price) * 100), stock, badge: draft.badge || null, image_url: draft.image || "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80", image_data_url: draft.image.startsWith("data:") ? draft.image : null, admin_status: stock === 0 ? "sold_out" : draft.status, is_active: true }; if (editing) await adminDb.from("products").update(payload).eq("id", editing.id); else await adminDb.from("products").insert(payload); setOpen(false); await load(); }
+  async function toggle(row: AdminProduct, active: boolean) { await adminDb.from("products").update({ admin_status: active ? "active" : "sold_out", stock: active && row.stock === 0 ? 1 : row.stock }).eq("id", row.id); load(); }
+  async function del(row: AdminProduct) { if (confirm(`Delete ${row.name}?`)) { await adminDb.from("products").delete().eq("id", row.id); load(); } }
+  return <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-lg font-semibold">Product Management</h2><button onClick={() => start()} className="inline-flex items-center gap-2 rounded-lg bg-[#1C1C1E] px-4 py-2 text-sm font-semibold text-white hover:bg-[#C9967A]"><Plus className="h-4 w-4" /> Add New Product</button></div><div className="mt-4 overflow-x-auto"><table className="w-full text-sm"><thead className="bg-slate-50 text-left text-xs uppercase text-slate-500"><tr><th className="p-3">Photo</th><th className="p-3">Name</th><th className="p-3">Category</th><th className="p-3">Price (Ksh)</th><th className="p-3">Stock Qty</th><th className="p-3">Status</th><th className="p-3">Actions</th></tr></thead><tbody className="divide-y divide-slate-100">{rows.map((r) => <tr key={r.id}><td className="p-3"><img src={r.image_data_url || r.image_url} className="h-12 w-12 rounded-lg object-cover" /></td><td className="p-3 font-medium">{r.name}</td><td className="p-3 capitalize">{r.category}</td><td className="p-3">{money(r.price_cents)}</td><td className="p-3">{r.stock}</td><td className="p-3"><Switch checked={r.stock > 0 && r.admin_status !== "sold_out"} onCheckedChange={(v) => toggle(r, v)} /></td><td className="p-3"><div className="flex gap-2"><button onClick={() => start(r)} className="rounded-lg border p-2 hover:text-[#C9967A]"><Pencil className="h-4 w-4" /></button><button onClick={() => del(r)} className="rounded-lg border p-2 hover:text-red-600"><Trash2 className="h-4 w-4" /></button></div></td></tr>)}</tbody></table></div><Dialog open={open} onOpenChange={setOpen}><DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-2xl"><DialogHeader><DialogTitle>{editing ? "Edit Product" : "Add New Product"}</DialogTitle></DialogHeader><form onSubmit={save} className="grid gap-4 sm:grid-cols-2"><Field label="Product Name"><input required value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} className="input-admin" /></Field><Field label="Category"><select value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} className="input-admin">{cats.map((c) => <option key={c.id} value={c.slug}>{c.name}</option>)}</select></Field><Field label="Price in Ksh"><input type="number" required value={draft.price} onChange={(e) => setDraft({ ...draft, price: +e.target.value })} className="input-admin" /></Field><Field label="Stock Quantity"><input type="number" required value={draft.stock} onChange={(e) => setDraft({ ...draft, stock: +e.target.value, status: +e.target.value === 0 ? "sold_out" : draft.status })} className="input-admin" /></Field><Field label="Short Description"><input maxLength={60} value={draft.tagline} onChange={(e) => setDraft({ ...draft, tagline: e.target.value })} className="input-admin" /></Field><Field label="Badge"><select value={draft.badge} onChange={(e) => setDraft({ ...draft, badge: e.target.value })} className="input-admin"><option value="">None</option><option>New</option><option>Bestseller</option></select></Field><Field label="Status"><select value={draft.status} onChange={(e) => setDraft({ ...draft, status: e.target.value as Draft["status"] })} className="input-admin"><option value="active">Active</option><option value="sold_out">Sold Out</option></select></Field><Field label="Product Image"><input type="file" accept="image/*" onChange={async (e) => { const f = e.target.files?.[0]; if (f) setDraft({ ...draft, image: await fileToDataUrl(f) }); }} className="text-sm" /></Field>{draft.image && <img src={draft.image} className="h-40 w-40 rounded-lg object-cover" />}<div className="sm:col-span-2 flex justify-end gap-2"><button type="button" onClick={() => setOpen(false)} className="rounded-lg border px-4 py-2">Cancel</button><button className="rounded-lg bg-[#1C1C1E] px-4 py-2 text-white">Save Product</button></div></form></DialogContent></Dialog></div>;
 }
+function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block text-sm font-medium text-slate-700">{label}<div className="mt-1">{children}</div></label>; }

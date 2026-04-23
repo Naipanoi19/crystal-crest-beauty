@@ -178,6 +178,22 @@
   }
   .animate-fade-up { animation: fade-up 0.7s var(--transition-luxe) both; }
 
+  .input-admin {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid oklch(0.87 0.01 250);
+    background: white;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    color: #1C1C1E;
+    outline: none;
+  }
+
+  .input-admin:focus {
+    border-color: #C9967A;
+    box-shadow: 0 0 0 3px rgb(201 150 122 / 0.14);
+  }
+
   @keyframes shimmer {
     0% { background-position: -400px 0; }
     100% { background-position: 400px 0; }
