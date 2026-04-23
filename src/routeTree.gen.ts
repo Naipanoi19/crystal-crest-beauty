@@ -31,6 +31,7 @@ import { Route as AdminPosRouteImport } from './routes/admin.pos'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminInventoryRouteImport } from './routes/admin.inventory'
 import { Route as AdminFeedbackRouteImport } from './routes/admin.feedback'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
@@ -142,6 +143,11 @@ const AdminFeedbackRoute = AdminFeedbackRouteImport.update({
   path: '/feedback',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/returns'
     | '/shop'
     | '/wishlist'
+    | '/admin/dashboard'
     | '/admin/feedback'
     | '/admin/inventory'
     | '/admin/orders'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/returns'
     | '/shop'
     | '/wishlist'
+    | '/admin/dashboard'
     | '/admin/feedback'
     | '/admin/inventory'
     | '/admin/orders'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/returns'
     | '/shop'
     | '/wishlist'
+    | '/admin/dashboard'
     | '/admin/feedback'
     | '/admin/inventory'
     | '/admin/orders'
@@ -463,10 +475,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFeedbackRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AdminFeedbackRoute: typeof AdminFeedbackRoute
   AdminInventoryRoute: typeof AdminInventoryRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
@@ -477,6 +497,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminDashboardRoute: AdminDashboardRoute,
   AdminFeedbackRoute: AdminFeedbackRoute,
   AdminInventoryRoute: AdminInventoryRoute,
   AdminOrdersRoute: AdminOrdersRoute,
