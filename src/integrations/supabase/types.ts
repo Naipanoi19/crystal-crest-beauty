@@ -248,7 +248,7 @@ export type Database = {
         Row: {
           admin_status: string
           badge: string | null
-          category: Database["public"]["Enums"]["product_category"]
+          category: string
           created_at: string
           description: string | null
           id: string
@@ -269,7 +269,7 @@ export type Database = {
         Insert: {
           admin_status?: string
           badge?: string | null
-          category: Database["public"]["Enums"]["product_category"]
+          category: string
           created_at?: string
           description?: string | null
           id?: string
@@ -290,7 +290,7 @@ export type Database = {
         Update: {
           admin_status?: string
           badge?: string | null
-          category?: Database["public"]["Enums"]["product_category"]
+          category?: string
           created_at?: string
           description?: string | null
           id?: string
