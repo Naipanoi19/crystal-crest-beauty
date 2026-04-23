@@ -1,16 +1,90 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { adminDb, money, type AdminOrder, type OrderItem } from "@/lib/admin";
 
 export const Route = createFileRoute("/admin/orders")({ component: OrdersAdmin });
+
 const statuses = ["all", "pending", "confirmed", "ready_for_pickup", "collected", "cancelled"] as const;
 
 function OrdersAdmin() {
-  const [orders, setOrders] = useState<AdminOrder[]>([]); const [items, setItems] = useState<OrderItem[]>([]); const [history, setHistory] = useState<any[]>([]); const [filter, setFilter] = useState("all"); const [expanded, setExpanded] = useState<string | null>(null);
-  const load = async () => { const [o, i, h]: any[] = await Promise.all([adminDb.from("orders").select("*").order("created_at", { ascending: false }), adminDb.from("order_items").select("*"), adminDb.from("order_status_history").select("*").order("created_at", { ascending: false })]); setOrders(o.data ?? []); setItems(i.data ?? []); setHistory(h.data ?? []); };
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [items, setItems] = useState<OrderItem[]>([]);
+  const [history, setHistory] = useState<any[]>([]);
+  const [filter, setFilter] = useState("all");
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  const load = async () => {
+    const [o, i, h]: any[] = await Promise.all([
+      adminDb.from("orders").select("*").order("created_at", { ascending: false }),
+      adminDb.from("order_items").select("*"),
+      adminDb.from("order_status_history").select("*").order("created_at", { ascending: false }),
+    ]);
+    setOrders(o.data ?? []);
+    setItems(i.data ?? []);
+    setHistory(h.data ?? []);
+  };
+
   useEffect(() => { load(); }, []);
+
   const shown = filter === "all" ? orders : orders.filter((o) => o.admin_status === filter);
   const byOrder = useMemo(() => new Map(orders.map((o) => [o.id, items.filter((i) => i.order_id === o.id)])), [orders, items]);
-  async function setStatus(id: string, status: string) { await adminDb.from("orders").update({ admin_status: status }).eq("id", id); load(); }
-  return <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-lg font-semibold">Order Management</h2><select value={filter} onChange={(e) => setFilter(e.target.value)} className="input-admin w-auto">{statuses.map((s) => <option key={s} value={s}>{s.replaceAll("_", " ")}</option>)}</select></div><div className="mt-4 overflow-x-auto"><table className="w-full text-sm"><thead className="bg-slate-50 text-left text-xs uppercase text-slate-500"><tr><th className="p-3">Order ID</th><th className="p-3">Customer Name</th><th className="p-3">Phone</th><th className="p-3">Products</th><th className="p-3">Total (Ksh)</th><th className="p-3">Status</th><th className="p-3">Date</th></tr></thead><tbody className="divide-y divide-slate-100">{shown.map((o) => <><tr key={o.id} onClick={() => setExpanded(expanded === o.id ? null : o.id)} className="cursor-pointer hover:bg-slate-50"><td className="p-3 font-medium">{o.order_number}</td><td className="p-3">{o.customer_name}</td><td className="p-3">{o.customer_phone}</td><td className="p-3 text-slate-600">{(byOrder.get(o.id) ?? []).map((i) => `${i.product_name} ×${i.quantity}`).join(", ")}</td><td className="p-3">{money(o.total_cents)}</td><td className="p-3" onClick={(e) => e.stopPropagation()}><select value={o.admin_status} onChange={(e) => setStatus(o.id, e.target.value)} className="rounded-lg border border-slate-200 px-2 py-1 capitalize">{statuses.filter((s) => s !== "all").map((s) => <option key={s} value={s}>{s.replaceAll("_", " ")}</option>)}</select></td><td className="p-3 text-slate-500">{new Date(o.created_at).toLocaleDateString()}</td></tr>{expanded === o.id && <tr><td colSpan={7} className="bg-slate-50 p-4"><div className="grid gap-4 md:grid-cols-3"><div><p className="font-semibold">Items</p>{(byOrder.get(o.id) ?? []).map((i) => <p key={i.product_name} className="text-sm text-slate-600">{i.product_name} ×{i.quantity} — {money(i.line_total_cents)}</p>)}</div><div><p className="font-semibold">Customer</p><p className="text-sm text-slate-600">{o.customer_name}<br />{o.customer_phone}<br />{o.customer_email || "No email"}<br />Pickup at Kajiado Town Studio</p>{o.notes && <p className="mt-2 text-sm text-slate-600">Notes: {o.notes}</p>}</div><div><p className="font-semibold">Status history</p>{history.filter((h) => h.order_id === o.id).map((h) => <p key={h.id} className="text-sm text-slate-600 capitalize">{h.status.replaceAll("_", " ")} at {new Date(h.created_at).toLocaleTimeString()}</p>)}</div></div></td></tr>}</>))}</tbody></table></div></div>;
+
+  async function setStatus(id: string, status: string) {
+    await adminDb.from("orders").update({ admin_status: status }).eq("id", id);
+    load();
+  }
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-lg font-semibold">Order Management</h2>
+        <select value={filter} onChange={(e) => setFilter(e.target.value)} className="input-admin w-auto capitalize">
+          {statuses.map((s) => <option key={s} value={s}>{s.replaceAll("_", " ")}</option>)}
+        </select>
+      </div>
+
+      <div className="mt-4 overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-slate-50 text-left text-xs uppercase text-slate-500">
+            <tr>
+              <th className="p-3">Order ID</th><th className="p-3">Customer Name</th><th className="p-3">Phone</th><th className="p-3">Products</th><th className="p-3">Total (Ksh)</th><th className="p-3">Status</th><th className="p-3">Date</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {shown.map((o) => {
+              const orderItems = byOrder.get(o.id) ?? [];
+              return (
+                <Fragment key={o.id}>
+                  <tr onClick={() => setExpanded(expanded === o.id ? null : o.id)} className="cursor-pointer hover:bg-slate-50">
+                    <td className="p-3 font-medium">{o.order_number}</td>
+                    <td className="p-3">{o.customer_name}</td>
+                    <td className="p-3">{o.customer_phone}</td>
+                    <td className="p-3 text-slate-600">{orderItems.map((i) => `${i.product_name} ×${i.quantity}`).join(", ")}</td>
+                    <td className="p-3">{money(o.total_cents)}</td>
+                    <td className="p-3" onClick={(e) => e.stopPropagation()}>
+                      <select value={o.admin_status} onChange={(e) => setStatus(o.id, e.target.value)} className="rounded-lg border border-slate-200 px-2 py-1 capitalize">
+                        {statuses.filter((s) => s !== "all").map((s) => <option key={s} value={s}>{s.replaceAll("_", " ")}</option>)}
+                      </select>
+                    </td>
+                    <td className="p-3 text-slate-500">{new Date(o.created_at).toLocaleDateString()}</td>
+                  </tr>
+                  {expanded === o.id && (
+                    <tr>
+                      <td colSpan={7} className="bg-slate-50 p-4">
+                        <div className="grid gap-4 md:grid-cols-3">
+                          <div><p className="font-semibold">Items</p>{orderItems.map((i) => <p key={`${i.product_name}-${i.quantity}`} className="text-sm text-slate-600">{i.product_name} ×{i.quantity} — {money(i.line_total_cents)}</p>)}</div>
+                          <div><p className="font-semibold">Customer</p><p className="text-sm text-slate-600">{o.customer_name}<br />{o.customer_phone}<br />{o.customer_email || "No email"}<br />Pickup at Kajiado Town Studio</p>{o.notes && <p className="mt-2 text-sm text-slate-600">Notes: {o.notes}</p>}</div>
+                          <div><p className="font-semibold">Status history</p>{history.filter((h) => h.order_id === o.id).map((h) => <p key={h.id} className="text-sm text-slate-600 capitalize">{String(h.status).replaceAll("_", " ")} at {new Date(h.created_at).toLocaleTimeString()}</p>)}</div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
