@@ -22,13 +22,6 @@ const IG_IMAGES = [
   "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
 ];
 
-const TESTIMONIALS = [
-  { name: "Wanjiru K.", city: "Nairobi", rating: 5, body: "Velvet Glow Serum is unreal. My skin looks like I slept for 12 hours, every day. The packaging alone makes me feel rich." },
-  { name: "Amina H.", city: "Mombasa", rating: 5, body: "Fast delivery, beautifully wrapped, and the matte lip is the most comfortable I've ever worn. Crystal Crest has my heart." },
-  { name: "Cynthia M.", city: "Kisumu", rating: 5, body: "I trust everything they curate. Argan Silk Hair Oil saved my dry ends. The team also actually replies on WhatsApp — rare." },
-  { name: "Lisa O.", city: "Kajiado", rating: 5, body: "Walked into the studio for pickup, left with a full ritual. Felt like a private boutique experience. Will be back." },
-];
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
