@@ -20,13 +20,14 @@ function MyEntries() {
   const [editing, setEditing] = useState<Record<string, Entry>>({});
   const [msg, setMsg] = useState("");
 
-  if (!session) { navigate({ to: "/cashier" }); return null; }
-
   async function load() {
-    const { data } = await (supabase as any).from("stock_entries").select("*").eq("cashier_id", session!.id).order("entry_date", { ascending: false }).order("created_at", { ascending: false });
+    if (!session) return;
+    const { data } = await (supabase as any).from("stock_entries").select("*").eq("cashier_id", session.id).order("entry_date", { ascending: false }).order("created_at", { ascending: false });
     setRows(data ?? []);
   }
   useEffect(() => { load(); }, []);
+
+  if (!session) { navigate({ to: "/cashier" }); return null; }
 
   function isEditable(e: Entry) {
     return !e.is_locked || (e.edit_unlocked_until && new Date(e.edit_unlocked_until) > new Date());

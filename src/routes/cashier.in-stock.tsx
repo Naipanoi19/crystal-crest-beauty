@@ -14,8 +14,6 @@ type Row = {
 function InStock() {
   const navigate = useNavigate();
   const session = getCashierSession();
-  if (!session) { navigate({ to: "/cashier" }); return null; }
-
   const [rows, setRows] = useState<Row[]>([]);
   const [filter, setFilter] = useState<string>("all");
 
@@ -25,6 +23,8 @@ function InStock() {
       .order("product_name")
       .then(({ data }: any) => setRows(data ?? []));
   }, []);
+
+  if (!session) { navigate({ to: "/cashier" }); return null; }
 
   // aggregate by product_name + category
   const groups = new Map<string, { name: string; category: string; image: string | null; price: number; stock: number }>();
