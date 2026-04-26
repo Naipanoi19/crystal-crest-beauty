@@ -4,10 +4,11 @@ import catSkin from "@/assets/cat-skincare.jpg";
 import catMakeup from "@/assets/cat-makeup.jpg";
 import catHair from "@/assets/cat-hair.jpg";
 import catNails from "@/assets/cat-nails.jpg";
+import ccLogo from "@/assets/cc-logo.png";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ProductCard } from "@/components/site/ProductCard";
-import type { Product } from "@/data/products";
+import { formatKES, type Product } from "@/data/products";
 
 const rootApi = getRouteApi("__root__");
 
@@ -57,7 +58,8 @@ function Index() {
         <div className="absolute inset-0 bg-gradient-to-b from-charcoal/30 via-charcoal/40 to-charcoal/80" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container-luxe text-center text-ivory">
-            <p className="animate-fade-up text-[11px] font-medium uppercase tracking-[0.4em] text-accent">Spring Edit · 2026</p>
+            <img src={ccLogo} alt="Crystal Crest monogram" width={260} height={260} className="mx-auto mb-6 h-28 w-auto animate-fade-up drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] md:h-36" />
+            <p className="animate-fade-up text-[11px] font-medium uppercase tracking-[0.4em] text-accent" style={{ animationDelay: "60ms" }}>Spring Edit · 2026</p>
             <h1 className="mx-auto mt-6 max-w-4xl animate-fade-up font-display text-5xl leading-[1.02] text-balance md:text-7xl lg:text-[88px]" style={{ animationDelay: "120ms" }}>
               Quiet luxury for every ritual.
             </h1>
@@ -84,20 +86,24 @@ function Index() {
         </div>
       </section>
 
-      {/* NEW ARRIVALS RIBBON */}
-      <section className="relative overflow-hidden border-y border-border bg-charcoal py-4">
-        <div className="flex w-max animate-marquee items-center gap-12 whitespace-nowrap text-ivory">
+      {/* SHOP PRODUCT MARQUEE */}
+      <section className="relative overflow-hidden border-y border-border bg-secondary py-6">
+        <div className="flex w-max animate-marquee items-center gap-6 whitespace-nowrap">
           {[...Array(2)].map((_, dup) => (
-            <div key={dup} className="flex items-center gap-12">
+            <div key={dup} className="flex items-center gap-6">
               {newArrivals.map((p) => (
                 <Link
                   key={`${dup}-${p.id}`}
                   to="/product/$slug"
                   params={{ slug: p.slug }}
-                  className="group flex items-center gap-3 transition hover:text-accent"
+                  className="group flex items-center gap-4 rounded-sm border border-border/60 bg-background/70 px-4 py-2.5 backdrop-blur transition hover:border-accent hover:shadow-card"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-accent" />
-                  <span className="text-[11px] font-medium uppercase tracking-[0.32em]">New · {p.name}</span>
+                  <img src={p.image} alt={p.name} loading="lazy" width={56} height={56} className="h-12 w-12 rounded-sm object-cover" />
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-accent">{p.category}</span>
+                    <span className="text-sm font-medium text-foreground transition group-hover:text-accent">{p.name}</span>
+                    <span className="text-xs text-foreground/70">{formatKES(p.price)}</span>
+                  </div>
                 </Link>
               ))}
             </div>
