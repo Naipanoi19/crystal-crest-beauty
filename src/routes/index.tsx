@@ -1,5 +1,5 @@
 import { createFileRoute, Link, getRouteApi } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Truck, ShieldCheck, Star, Quote } from "lucide-react";
+import { ArrowRight, Sparkles, Truck, ShieldCheck, Star } from "lucide-react";
 import catSkin from "@/assets/cat-skincare.jpg";
 import catMakeup from "@/assets/cat-makeup.jpg";
 import catHair from "@/assets/cat-hair.jpg";
@@ -169,35 +169,6 @@ function Index() {
         </div>
         <div className="mt-10 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((p) => <ProductCard key={p.id} product={p} />)}
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="bg-charcoal py-20 text-ivory md:py-28">
-        <div className="container-luxe">
-          <div className="text-center">
-            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">Real Voices</p>
-            <h2 className="mt-3 font-display text-4xl md:text-5xl">Loved across Kenya</h2>
-          </div>
-
-          <div className="mt-12 -mx-5 overflow-x-auto px-5 no-scrollbar">
-            <div className="flex w-max gap-6 pb-2">
-              {TESTIMONIALS.map((t) => (
-                <figure key={t.name} className="w-[320px] shrink-0 rounded-sm border border-white/10 bg-white/5 p-7 backdrop-blur sm:w-[380px]">
-                  <Quote className="h-6 w-6 text-accent" />
-                  <div className="mt-4 flex">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`h-3.5 w-3.5 ${i < t.rating ? "fill-accent stroke-accent" : "stroke-white/30"}`} />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 font-display text-xl leading-snug text-ivory">"{t.body}"</blockquote>
-                  <figcaption className="mt-6 text-xs uppercase tracking-[0.22em] text-ivory/70">
-                    {t.name} · {t.city}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
