@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
-import { Boxes, ChevronRight, FolderTree, Home, Inbox, LayoutDashboard, LogOut, Menu, Package, Settings, ShoppingCart, Users, X } from "lucide-react";
+import { Boxes, ChevronRight, FolderTree, Home, Inbox, LayoutDashboard, LogOut, Menu, Package, Settings, ShoppingCart, Users, X, UserCog, ClipboardList } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { adminDb, adminEmail } from "@/lib/admin";
@@ -14,6 +14,8 @@ const nav = [
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { to: "/admin/customers", label: "Customers", icon: Users },
+  { to: "/admin/cashiers", label: "Cashiers", icon: UserCog },
+  { to: "/admin/stock-entries", label: "Stock Entries", icon: ClipboardList },
   { to: "/admin/categories", label: "Categories", icon: FolderTree },
   { to: "/admin/content", label: "Homepage Content", icon: Home },
   { to: "/admin/messages", label: "Messages", icon: Inbox },
