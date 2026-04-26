@@ -30,14 +30,14 @@ export function Footer() {
           </p>
           <ul className="mt-5 space-y-2 text-sm text-ivory/80">
             <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-accent" /> Kajiado Town · Opposite Crapas Hotel</li>
-            <li className="flex items-start gap-2"><Phone className="mt-0.5 h-4 w-4 text-accent" /> +254 700 000 000</li>
+            <li className="flex items-start gap-2"><Phone className="mt-0.5 h-4 w-4 text-accent" /> 0700 074 333</li>
             <li className="flex items-start gap-2"><Mail className="mt-0.5 h-4 w-4 text-accent" /> hello@crystalcrest.co.ke</li>
           </ul>
           <div className="mt-5 flex gap-2">
             <SocialIcon href="https://instagram.com/" label="Instagram"><Instagram className="h-4 w-4" /></SocialIcon>
             <SocialIcon href="https://tiktok.com/" label="TikTok"><Music2 className="h-4 w-4" /></SocialIcon>
             <SocialIcon href="https://facebook.com/" label="Facebook"><Facebook className="h-4 w-4" /></SocialIcon>
-            <SocialIcon href="https://wa.me/254700000000" label="WhatsApp"><MessageCircle className="h-4 w-4" /></SocialIcon>
+            <SocialIcon href="https://wa.me/254700074333" label="WhatsApp"><MessageCircle className="h-4 w-4" /></SocialIcon>
           </div>
         </div>
 
