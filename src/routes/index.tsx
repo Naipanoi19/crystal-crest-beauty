@@ -4,7 +4,7 @@ import catSkin from "@/assets/cat-skincare.jpg";
 import catMakeup from "@/assets/cat-makeup.jpg";
 import catHair from "@/assets/cat-hair.jpg";
 import catNails from "@/assets/cat-nails.jpg";
-import ccLogo from "@/assets/cc-logo.png";
+
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ProductCard } from "@/components/site/ProductCard";
@@ -54,11 +54,10 @@ function Index() {
 
       {/* HERO — full screen cinematic */}
       <section className="relative h-[calc(100vh-4rem)] min-h-[640px] w-full overflow-hidden">
-        <img src={HERO_IMG} alt="Editorial beauty close-up" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={HERO_IMG} alt="Crystal Crest curated beauty editorial" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-charcoal/30 via-charcoal/40 to-charcoal/80" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container-luxe text-center text-ivory">
-            <img src={ccLogo} alt="Crystal Crest monogram" width={260} height={260} className="mx-auto mb-6 h-28 w-auto animate-fade-up drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] md:h-36" />
             <p className="animate-fade-up text-[11px] font-medium uppercase tracking-[0.4em] text-accent" style={{ animationDelay: "60ms" }}>Spring Edit · 2026</p>
             <h1 className="mx-auto mt-6 max-w-4xl animate-fade-up font-display text-5xl leading-[1.02] text-balance md:text-7xl lg:text-[88px]" style={{ animationDelay: "120ms" }}>
               Quiet luxury for every ritual.
