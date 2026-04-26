@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { useWishlist } from "@/lib/wishlist";
 import { formatKES, type Product } from "@/data/products";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import ccLogo from "@/assets/cc-logo.png";
 
 const rootApi = getRouteApi("__root__");
 
@@ -55,8 +56,11 @@ export function Header() {
           <Menu className="h-5 w-5" />
         </button>
 
-        <Link to="/" className="font-display text-xl tracking-tight text-foreground md:text-2xl">
-          Crystal <span className="text-accent">Crest</span>
+        <Link to="/" aria-label="Crystal Crest home" className="flex items-center gap-2.5">
+          <img src={ccLogo} alt="Crystal Crest" width={40} height={40} className="h-9 w-9 md:h-10 md:w-10" />
+          <span className="hidden font-display text-lg tracking-tight text-foreground sm:inline md:text-xl">
+            Crystal <span className="text-accent">Crest</span>
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm text-foreground/80 md:flex">

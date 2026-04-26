@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      cashiers: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          is_active: boolean
+          pin_hash: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          id?: string
+          is_active?: boolean
+          pin_hash: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          pin_hash?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           contact: string
@@ -385,6 +415,78 @@ export type Database = {
         }
         Relationships: []
       }
+      stock_entries: {
+        Row: {
+          buying_price_cents: number
+          cashier_id: string
+          category: string
+          created_at: string
+          description: string | null
+          edit_unlocked_until: string | null
+          entry_date: string
+          id: string
+          image_data_url: string | null
+          is_locked: boolean
+          product_id: string | null
+          product_name: string
+          quantity_bought: number
+          quantity_sold: number
+          selling_price_cents: number
+          updated_at: string
+        }
+        Insert: {
+          buying_price_cents?: number
+          cashier_id: string
+          category: string
+          created_at?: string
+          description?: string | null
+          edit_unlocked_until?: string | null
+          entry_date?: string
+          id?: string
+          image_data_url?: string | null
+          is_locked?: boolean
+          product_id?: string | null
+          product_name: string
+          quantity_bought?: number
+          quantity_sold?: number
+          selling_price_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          buying_price_cents?: number
+          cashier_id?: string
+          category?: string
+          created_at?: string
+          description?: string | null
+          edit_unlocked_until?: string | null
+          entry_date?: string
+          id?: string
+          image_data_url?: string | null
+          is_locked?: boolean
+          product_id?: string | null
+          product_name?: string
+          quantity_bought?: number
+          quantity_sold?: number
+          selling_price_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_entries_cashier_id_fkey"
+            columns: ["cashier_id"]
+            isOneToOne: false
+            referencedRelation: "cashiers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_entries_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       store_categories: {
         Row: {
           created_at: string
@@ -438,6 +540,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_create_cashier: {
+        Args: { _full_name: string; _pin: string; _username: string }
+        Returns: string
+      }
+      admin_reset_cashier_pin: {
+        Args: { _cashier_id: string; _pin: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -459,6 +569,14 @@ export type Database = {
           _shipping_cents: number
         }
         Returns: Json
+      }
+      verify_cashier: {
+        Args: { _pin: string; _username: string }
+        Returns: {
+          full_name: string
+          id: string
+          username: string
+        }[]
       }
     }
     Enums: {

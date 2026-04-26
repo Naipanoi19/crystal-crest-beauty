@@ -18,6 +18,7 @@ import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CashierRouteImport } from './routes/cashier'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
@@ -25,7 +26,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as CashierNewStockRouteImport } from './routes/cashier.new-stock'
+import { Route as CashierInStockRouteImport } from './routes/cashier.in-stock'
+import { Route as CashierEntriesRouteImport } from './routes/cashier.entries'
 import { Route as AdminUploadsRouteImport } from './routes/admin.uploads'
+import { Route as AdminStockEntriesRouteImport } from './routes/admin.stock-entries'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPosRouteImport } from './routes/admin.pos'
@@ -37,6 +42,7 @@ import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminContentRouteImport } from './routes/admin.content'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminCashiersRouteImport } from './routes/admin.cashiers'
 
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
@@ -83,6 +89,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CashierRoute = CashierRouteImport.update({
+  id: '/cashier',
+  path: '/cashier',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -118,9 +129,29 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
   path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CashierNewStockRoute = CashierNewStockRouteImport.update({
+  id: '/new-stock',
+  path: '/new-stock',
+  getParentRoute: () => CashierRoute,
+} as any)
+const CashierInStockRoute = CashierInStockRouteImport.update({
+  id: '/in-stock',
+  path: '/in-stock',
+  getParentRoute: () => CashierRoute,
+} as any)
+const CashierEntriesRoute = CashierEntriesRouteImport.update({
+  id: '/entries',
+  path: '/entries',
+  getParentRoute: () => CashierRoute,
+} as any)
 const AdminUploadsRoute = AdminUploadsRouteImport.update({
   id: '/uploads',
   path: '/uploads',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStockEntriesRoute = AdminStockEntriesRouteImport.update({
+  id: '/stock-entries',
+  path: '/stock-entries',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
@@ -178,6 +209,11 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCashiersRoute = AdminCashiersRouteImport.update({
+  id: '/cashiers',
+  path: '/cashiers',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -185,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/cashier': typeof CashierRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -194,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/cashiers': typeof AdminCashiersRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/content': typeof AdminContentRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -205,7 +243,11 @@ export interface FileRoutesByFullPath {
   '/admin/pos': typeof AdminPosRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stock-entries': typeof AdminStockEntriesRoute
   '/admin/uploads': typeof AdminUploadsRoute
+  '/cashier/entries': typeof CashierEntriesRoute
+  '/cashier/in-stock': typeof CashierInStockRoute
+  '/cashier/new-stock': typeof CashierNewStockRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -214,6 +256,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
+  '/cashier': typeof CashierRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -223,6 +266,7 @@ export interface FileRoutesByTo {
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/cashiers': typeof AdminCashiersRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/content': typeof AdminContentRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -234,7 +278,11 @@ export interface FileRoutesByTo {
   '/admin/pos': typeof AdminPosRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stock-entries': typeof AdminStockEntriesRoute
   '/admin/uploads': typeof AdminUploadsRoute
+  '/cashier/entries': typeof CashierEntriesRoute
+  '/cashier/in-stock': typeof CashierInStockRoute
+  '/cashier/new-stock': typeof CashierNewStockRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -245,6 +293,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/cashier': typeof CashierRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -254,6 +303,7 @@ export interface FileRoutesById {
   '/returns': typeof ReturnsRoute
   '/shop': typeof ShopRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/cashiers': typeof AdminCashiersRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/content': typeof AdminContentRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -265,7 +315,11 @@ export interface FileRoutesById {
   '/admin/pos': typeof AdminPosRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/stock-entries': typeof AdminStockEntriesRoute
   '/admin/uploads': typeof AdminUploadsRoute
+  '/cashier/entries': typeof CashierEntriesRoute
+  '/cashier/in-stock': typeof CashierInStockRoute
+  '/cashier/new-stock': typeof CashierNewStockRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -277,6 +331,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/auth'
+    | '/cashier'
     | '/checkout'
     | '/contact'
     | '/faq'
@@ -286,6 +341,7 @@ export interface FileRouteTypes {
     | '/returns'
     | '/shop'
     | '/wishlist'
+    | '/admin/cashiers'
     | '/admin/categories'
     | '/admin/content'
     | '/admin/customers'
@@ -297,7 +353,11 @@ export interface FileRouteTypes {
     | '/admin/pos'
     | '/admin/products'
     | '/admin/settings'
+    | '/admin/stock-entries'
     | '/admin/uploads'
+    | '/cashier/entries'
+    | '/cashier/in-stock'
+    | '/cashier/new-stock'
     | '/product/$slug'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -306,6 +366,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/account'
     | '/auth'
+    | '/cashier'
     | '/checkout'
     | '/contact'
     | '/faq'
@@ -315,6 +376,7 @@ export interface FileRouteTypes {
     | '/returns'
     | '/shop'
     | '/wishlist'
+    | '/admin/cashiers'
     | '/admin/categories'
     | '/admin/content'
     | '/admin/customers'
@@ -326,7 +388,11 @@ export interface FileRouteTypes {
     | '/admin/pos'
     | '/admin/products'
     | '/admin/settings'
+    | '/admin/stock-entries'
     | '/admin/uploads'
+    | '/cashier/entries'
+    | '/cashier/in-stock'
+    | '/cashier/new-stock'
     | '/product/$slug'
     | '/admin'
   id:
@@ -336,6 +402,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/auth'
+    | '/cashier'
     | '/checkout'
     | '/contact'
     | '/faq'
@@ -345,6 +412,7 @@ export interface FileRouteTypes {
     | '/returns'
     | '/shop'
     | '/wishlist'
+    | '/admin/cashiers'
     | '/admin/categories'
     | '/admin/content'
     | '/admin/customers'
@@ -356,7 +424,11 @@ export interface FileRouteTypes {
     | '/admin/pos'
     | '/admin/products'
     | '/admin/settings'
+    | '/admin/stock-entries'
     | '/admin/uploads'
+    | '/cashier/entries'
+    | '/cashier/in-stock'
+    | '/cashier/new-stock'
     | '/product/$slug'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -367,6 +439,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CashierRoute: typeof CashierRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
@@ -444,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cashier': {
+      id: '/cashier'
+      path: '/cashier'
+      fullPath: '/cashier'
+      preLoaderRoute: typeof CashierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -493,11 +573,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cashier/new-stock': {
+      id: '/cashier/new-stock'
+      path: '/new-stock'
+      fullPath: '/cashier/new-stock'
+      preLoaderRoute: typeof CashierNewStockRouteImport
+      parentRoute: typeof CashierRoute
+    }
+    '/cashier/in-stock': {
+      id: '/cashier/in-stock'
+      path: '/in-stock'
+      fullPath: '/cashier/in-stock'
+      preLoaderRoute: typeof CashierInStockRouteImport
+      parentRoute: typeof CashierRoute
+    }
+    '/cashier/entries': {
+      id: '/cashier/entries'
+      path: '/entries'
+      fullPath: '/cashier/entries'
+      preLoaderRoute: typeof CashierEntriesRouteImport
+      parentRoute: typeof CashierRoute
+    }
     '/admin/uploads': {
       id: '/admin/uploads'
       path: '/uploads'
       fullPath: '/admin/uploads'
       preLoaderRoute: typeof AdminUploadsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/stock-entries': {
+      id: '/admin/stock-entries'
+      path: '/stock-entries'
+      fullPath: '/admin/stock-entries'
+      preLoaderRoute: typeof AdminStockEntriesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/settings': {
@@ -577,10 +685,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/cashiers': {
+      id: '/admin/cashiers'
+      path: '/cashiers'
+      fullPath: '/admin/cashiers'
+      preLoaderRoute: typeof AdminCashiersRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminCashiersRoute: typeof AdminCashiersRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminContentRoute: typeof AdminContentRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
@@ -592,11 +708,13 @@ interface AdminRouteChildren {
   AdminPosRoute: typeof AdminPosRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStockEntriesRoute: typeof AdminStockEntriesRoute
   AdminUploadsRoute: typeof AdminUploadsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCashiersRoute: AdminCashiersRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminContentRoute: AdminContentRoute,
   AdminCustomersRoute: AdminCustomersRoute,
@@ -608,11 +726,27 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPosRoute: AdminPosRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminStockEntriesRoute: AdminStockEntriesRoute,
   AdminUploadsRoute: AdminUploadsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface CashierRouteChildren {
+  CashierEntriesRoute: typeof CashierEntriesRoute
+  CashierInStockRoute: typeof CashierInStockRoute
+  CashierNewStockRoute: typeof CashierNewStockRoute
+}
+
+const CashierRouteChildren: CashierRouteChildren = {
+  CashierEntriesRoute: CashierEntriesRoute,
+  CashierInStockRoute: CashierInStockRoute,
+  CashierNewStockRoute: CashierNewStockRoute,
+}
+
+const CashierRouteWithChildren =
+  CashierRoute._addFileChildren(CashierRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -620,6 +754,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  CashierRoute: CashierRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
